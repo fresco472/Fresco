@@ -6,6 +6,10 @@ BOT_TOKEN = '7602951193:AAEgttnkv2Dn80xHR7lBnrqL3t-0PvhHpWM'
 stater = fsm.FSM() 
 bot = telebot.TeleBot(BOT_TOKEN)
 
+def menu():
+    stater.set_state(message.chat.id, fsm.DEFAULT_STATE)
+    bot.send_message(message.chat.id, text='Главное меню', reply_markup=keyboards.start)         
+
 def handler_def_state(message):
     if message.text == "Фото 🖼":
         stater.set_state(message.chat.id, fsm.IMAGE_STATE)
@@ -18,17 +22,17 @@ def handler_def_state(message):
 
 def handler_image_state(message):
     if message.text == "◀️ В меню":
-        stater.set_state(message.chat.id, fsm.DEFAULT_STATE)
-        bot.send_message(message.chat.id, text='Главное меню', reply_markup=keyboards.start)
+        menu
     else: 
         bot.send_message(message.chat.id, text='Начинаю генерировать фото')
 
 def handler_text_state(message):  
     if message.text == "◀️ В меню":
-            stater.set_state(message.chat.id, fsm.DEFAULT_STATE)
-            bot.send_message(message.chat.id, text='Главное меню', reply_markup=keyboards.start)
+        menu
     else: 
-            bot.send_message(message.chat.id, text='Начинаю генерировать текст')          
+        bot.send_message(message.chat.id, text='Начинаю генерировать текст') 
+
+
 
 @bot.message_handler(func=lambda message: True)
 def echo_all(message):
